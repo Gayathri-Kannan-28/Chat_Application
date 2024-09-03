@@ -28,9 +28,10 @@ export const sendMessage = async (req, res) => {
 			conversation.messages.push(newMessage._id);
 		}
 
-	
+		// await conversation.save();
+		// await newMessage.save();
 
-		
+		// this will run in parallel
 		await Promise.all([conversation.save(), newMessage.save()]);
 
 		// SOCKET IO FUNCTIONALITY WILL GO HERE
@@ -54,7 +55,7 @@ export const getMessages = async (req, res) => {
 
 		const conversation = await Conversation.findOne({
 			participants: { $all: [senderId, userToChatId] },
-		}).populate("messages"); 
+		}).populate("messages"); // NOT REFERENCE BUT ACTUAL MESSAGES
 
 		if (!conversation) return res.status(200).json([]);
 
